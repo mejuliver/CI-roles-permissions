@@ -102,20 +102,24 @@ if ( ! function_exists('setRolesPerms')) {
 
     function setRolesPerms($id=false){
 
-        $CI = & get_instance();
+        $CI =& get_instance();
+
+        $CI->load->library('session');
 
         // initialize defaults
         if( !$id ){
-
-            $id = ( $CI->session->userdata('user_info') != null && $CI->session->userdata('user_info') != '' ) ? $CI->session->userdata('user_info')['user_id'] : false; 
+            $id = ( $CI->session->userdata('auth') != null && $CI->session->userdata('auth') == true ) ? $CI->session->userdata('user_info')['user_id'] : false; 
 
         }
-
+        
         if( !$id ){
 
             return false;
 
         }
+
+
+        $CI->load->database('chat',true);
 
 
         // get all the user roles
