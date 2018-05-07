@@ -8,22 +8,25 @@ if ( ! function_exists('isAuth')) {
 
     	$CI = & get_instance();
 
-
      	// check if theres a role first
 
-        if( $CI->session->userdata('auth') != null || $CI->session->userdata('auth') !== false ){
+        if( $CI->session->userdata('auth')){
 
         	// set the auth to false
-        	$CI->session->set_userdata('auth',false);
+        	$CI->session->set_userdata('auth',true);
     		return true;
 
+        }else{
+            // set the auth to false
+            $CI->session->set_userdata('auth',false);
+
+            return false;
         }
 
-        // set the auth to false
-        $CI->session->set_userdata('auth',true);
-        return false;
+
+        
+        
 
     }   
 
 }
-
