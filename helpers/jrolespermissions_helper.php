@@ -6,19 +6,12 @@ if ( ! function_exists('inRole')) {
 
     function inRole($role_name=false){
 
-        
-
         $CI = & get_instance();
-
-
-
         $res = false;
 
         // check if there are no roles and permissions
         if( $CI->session->userdata('jroles_perms') == null || $CI->session->userdata('jroles_perms') == '' ){
-
             return false;
-
         }
 
 
@@ -27,21 +20,12 @@ if ( ! function_exists('inRole')) {
 
         if( $CI->session->userdata('jroles_perms') != null && $CI->session->userdata('jroles_perms') != '' && $role_name ){
 
-
-
             if( in_array(strtolower($role_name), $CI->session->userdata('jroles_perms')['roles'] )){
-
-
-
                 return true;
-
             }
 
-            
 
         }
-
-
 
         return $res;
 
@@ -55,20 +39,13 @@ if ( ! function_exists('canPerm')) {
 
     function canPerm($perm_name=false){
 
-        
-
+    
         $CI = & get_instance();
-
-
-
         $res = false;
-
 
         // check if there are no roles and permissions
         if( $CI->session->userdata('jroles_perms') == null || $CI->session->userdata('jroles_perms') == '' ){
-
             return false;
-
         }
 
 
@@ -77,8 +54,6 @@ if ( ! function_exists('canPerm')) {
         if( $CI->session->userdata('jroles_perms') != null && $CI->session->userdata('jroles_perms') != '' && $perm_name ){
 
             if( in_array(strtolower($perm_name), $CI->session->userdata('jroles_perms')['permissions'] )){
-
-
 
                 return true;
 
@@ -119,12 +94,12 @@ if ( ! function_exists('setRolesPerms')) {
         }
 
 
-        $CI->load->database('chat',true);
+        $cndb = $CI->load->database('default',true);
 
 
         // get all the user roles
 
-        $roles = $CI->db->get_where( 'role_users',[ 'user_id' => $id ] )->result();
+        $roles = $cndb->get_where( 'roles_users',[ 'users_id' => $id ] )->result();
 
 
 
@@ -140,13 +115,13 @@ if ( ! function_exists('setRolesPerms')) {
 
 
 
-            array_push($new_roles,strtolower($CI->db->get_where('roles',['id' => $r->role_id ])->row()->label ) );
+            array_push($new_roles,strtolower($cndb->get_where('roles',['id' => $r->roles_id ])->row()->label ) );
 
 
 
             // get all the user role perms
 
-            $perms = $CI->db->get_where( 'role_permissions',[ 'role_id' => $r->role_id ] )->result();
+            $perms = $cndb->get_where( 'perms_roles',[ 'roles_id' => $r->roles_id ] )->result();
 
 
 
@@ -156,7 +131,7 @@ if ( ! function_exists('setRolesPerms')) {
 
 
 
-                array_push($new_perms,strtolower( $CI->db->get_where('permissions',['id' => $p->perm_id ])->row()->label ) );
+                array_push($new_perms,strtolower( $cndb->get_where('permissions',['id' => $p->perms_id ])->row()->label ) );
 
             }
 
@@ -173,7 +148,6 @@ if ( ! function_exists('setRolesPerms')) {
         // set the role and permissions as session
 
         $CI->session->set_userdata('jroles_perms',$roles_perms);
-
         
 
         return true;    

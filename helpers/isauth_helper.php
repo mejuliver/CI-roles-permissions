@@ -19,14 +19,11 @@ if ( ! function_exists('isAuth')) {
         }else{
             // set the auth to false
             $CI->session->set_userdata('auth',false);
-
+            $CI->session->unset_userdata('user_info');
             return false;
-        }
-
-
+        } 
         
-        
-
     }   
 
 }
+
