@@ -70,7 +70,53 @@ if ( ! function_exists('canPerm')) {
     }   
 
 }
+if( ! function_exists('getAllRoles') ){
+    function getAllRoles(){
 
+        $CI = & get_instance();
+
+        $roles = $CI->db->get( 'roles' )->result();
+
+        foreach( $roles as $r ){
+
+            $perms_roles = $CI->db->get_where('perms_roles', [ 'roles_id'  => $r->id ])->result();
+            $permissions = [];
+            foreach ($perms_roles as $pr ) {
+                $permissions[] = $CI->db->get_where('permissions', [ 'id' => $pr->perms_id ])->row();
+            }
+            $r->permissions = $permissions;
+
+        }
+
+        return $roles;
+    }
+}
+
+if ( ! function_exists('getUsersPerRolesName') ){
+    function getUsersByRoleName($name){
+
+         $CI = & get_instance();
+
+        // get the id of the requested role first
+        $role_name = strtolower($name);
+        $role_id = $CI->db->get_where('roles', [ 'label' => $role_name ])->row();
+
+        if( $role_id != NULL ){
+
+            $users_roles = $CI->db->get_where('roles_users', [ 'roles_id' => $role_id->id ])->result();
+            $users = [];
+            foreach( $users_roles as $ur ){
+                $users[] = $CI->db->get_where('profile', [ 'users_id' => $ur->users_id ])->row();
+            }
+
+            return $users;
+
+        }else{
+            return false;
+        }
+
+    }
+}
 
 
 if ( ! function_exists('setRolesPerms')) {
@@ -151,8 +197,6 @@ if ( ! function_exists('setRolesPerms')) {
         
 
         return true;    
-
-
 
     }
 
