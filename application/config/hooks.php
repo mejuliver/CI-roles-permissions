@@ -21,7 +21,7 @@ $hook['post_controller'][] = array(
 $hook['post_controller'][] = array(
         'class'    => '',
         'function' => 'setRolesPerms',
-        'filename' => 'jrolespermissions_helper.php',
+        'filename' => 'rolespermissions_helper.php',
         'filepath' => 'helpers',
         'params'   => false
 );
