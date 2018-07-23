@@ -15,16 +15,37 @@ if ( ! function_exists('inRole')) {
         }
 
 
+        if( $role_name ){
+            if (is_array($role_name) or ($role_name instanceof Traversable)){
+                $tmp_arr = [];
+                foreach( $role_name as $r){
 
-        // check if theres a role first
+                    
 
-        if( $CI->session->userdata('roles_perms') != null && $CI->session->userdata('roles_perms') != '' && $role_name ){
+                    if( in_array(strtolower($r), $CI->session->userdata('roles_perms')['roles'] )){
+                        array_push($tmp_arr, 1);
+                    }else{
+                        array_push($tmp_arr, 0);
+                    }
+                }
+                if( in_array(0, $tmp_arr )){
+                    return false;
+                }else{
+                    return true;
+                }
 
-            if( in_array(strtolower($role_name), $CI->session->userdata('roles_perms')['roles'] )){
-                return true;
+            }else{
+                // check if theres a role first
+
+                if( $CI->session->userdata('roles_perms') != null && $CI->session->userdata('roles_perms') != '' && $role_name ){
+
+                    if( in_array(strtolower($role_name), $CI->session->userdata('roles_perms')['roles'] )){
+                        return true;
+                    }
+
+
+                }
             }
-
-
         }
 
         return $res;
@@ -48,21 +69,40 @@ if ( ! function_exists('canPerm')) {
             return false;
         }
 
+        if( $perm_name ){
+           if (is_array($perm_name) or ($perm_name instanceof Traversable)){
+                $tmp_arr = [];
+                foreach( $perm_name as $p){
 
-        // check if theres a role first
+                    
 
-        if( $CI->session->userdata('roles_perms') != null && $CI->session->userdata('roles_perms') != '' && $perm_name ){
+                    if( in_array(strtolower($p), $CI->session->userdata('roles_perms')['permissions'] )){
+                        array_push($tmp_arr, 1);
+                    }else{
+                        array_push($tmp_arr, 0);
+                    }
+                }
+                if( in_array(0, $tmp_arr )){
+                    return false;
+                }else{
+                    return true;
+                }
+            } else {
+                // check if theres a role first
+                if( $CI->session->userdata('roles_perms') != null && $CI->session->userdata('roles_perms') != '' && $perm_name ){
 
-            if( in_array(strtolower($perm_name), $CI->session->userdata('roles_perms')['permissions'] )){
+                    if( in_array(strtolower($perm_name), $CI->session->userdata('roles_perms')['permissions'] )){
 
-                return true;
+                        return true;
+
+                    }
+
+                }
 
             }
-
-
-
         }
 
+        
 
 
         return $res;
@@ -93,10 +133,8 @@ if( ! function_exists('getAllRoles') ){
 }
 
 if ( ! function_exists('getUsersPerRolesName') ){
-    function getUsersByRoleName($name){
-
-         $CI = & get_instance();
-
+    function getUsersPerRolesName($name){
+        $CI =& get_instance();
         // get the id of the requested role first
         $role_name = strtolower($name);
         $role_id = $CI->db->get_where('roles', [ 'label' => $role_name ])->row();
