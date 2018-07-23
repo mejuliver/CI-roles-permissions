@@ -20,8 +20,6 @@ if ( ! function_exists('inRole')) {
                 $tmp_arr = [];
                 foreach( $role_name as $r){
 
-                    
-
                     if( in_array(strtolower($r), $CI->session->userdata('roles_perms')['roles'] )){
                         array_push($tmp_arr, 1);
                     }else{
@@ -117,23 +115,22 @@ if( ! function_exists('getAllRoles') ){
 
         $roles = $CI->db->get( 'roles' )->result();
 
-        foreach( $roles as $r ){
+        return $roles;
+    }
+}
+if( ! function_exists('getAllRoles') ){
+    function getAllPermissions(){
 
-            $perms_roles = $CI->db->get_where('perms_roles', [ 'roles_id'  => $r->id ])->result();
-            $permissions = [];
-            foreach ($perms_roles as $pr ) {
-                $permissions[] = $CI->db->get_where('permissions', [ 'id' => $pr->perms_id ])->row();
-            }
-            $r->permissions = $permissions;
+        $CI = & get_instance();
 
-        }
+        $roles = $CI->db->get( 'permissions' )->result();
 
         return $roles;
     }
 }
 
 if ( ! function_exists('getUsersPerRolesName') ){
-    function getUsersPerRolesName($name){
+    function getUsersPerRolesName($name,$table=fase){
         $CI =& get_instance();
         // get the id of the requested role first
         $role_name = strtolower($name);
@@ -144,7 +141,46 @@ if ( ! function_exists('getUsersPerRolesName') ){
             $users_roles = $CI->db->get_where('roles_users', [ 'roles_id' => $role_id->id ])->result();
             $users = [];
             foreach( $users_roles as $ur ){
-                $users[] = $CI->db->get_where('profile', [ 'users_id' => $ur->users_id ])->row();
+
+                if( !$table ){
+                    $q =  $CI->db->get_where('profile', [ 'users_id' => $ur->users_id ])->row();
+                }else{
+                    $q = $CI->db->get_where($table, [ 'users_id' => $ur->users_id ])->row();
+                }
+
+                $users[] = $q;
+            }
+
+            return $users;
+
+        }else{
+            return false;
+        }
+
+    }
+}
+
+
+if ( ! function_exists('getUsersPerPermsName') ){
+    function getUsersPerPermsName($name,$table=false){
+        $CI =& get_instance();
+        // get the id of the requested role first
+        $perms_name = strtolower($name);
+        $permission = $CI->db->get_where('permissions', [ 'label' => $perms_name ])->row();
+
+        if( $permission != NULL ){
+
+            $perms_users = $CI->db->get_where('perms_users', [ 'perms_id' => $permission->id ])->result();
+            $users = [];
+            foreach( $perms_users as $pu ){
+
+                if( !$table ){
+                    $CI->db->get_where('profile', [ 'users_id' => $pu->users_id ])->row();
+                }else{
+                    $CI->db->get_where($table, [ 'users_id' => $pu->users_id ])->row();
+                }
+
+                $users[] = $q;
             }
 
             return $users;
@@ -167,7 +203,7 @@ if ( ! function_exists('setRolesPerms')) {
 
         // initialize defaults
         if( !$id ){
-            $id = ( $CI->session->userdata('auth') != null && $CI->session->userdata('auth') == true ) ? $CI->session->userdata('user_info')['user_id'] : false; 
+            $id = ( $CI->session->userdata('auth') != null && $CI->session->userdata('auth') == true ) ? $CI->session->userdata('user_info')['users_id'] : false; 
 
         }
         
@@ -182,52 +218,35 @@ if ( ! function_exists('setRolesPerms')) {
 
 
         // get all the user roles
-
         $roles = $cndb->get_where( 'roles_users',[ 'users_id' => $id ] )->result();
 
 
-
         $new_roles = [];
-
         $new_perms = [];
-
 
 
         // build and set user roles
 
         foreach( $roles as $r){
-
-
-
             array_push($new_roles,strtolower($cndb->get_where('roles',['id' => $r->roles_id ])->row()->label ) );
+        }
+
+        // get all the user role perms
+        $perms = $cndb->get_where( 'perms_users',[ 'users_id' => $id ] )->result();
+
+        // build and set user roles
+
+        foreach( $perms as $p ){
 
 
-
-            // get all the user role perms
-
-            $perms = $cndb->get_where( 'perms_roles',[ 'roles_id' => $r->roles_id ] )->result();
-
-
-
-            // build and set user roles
-
-            foreach( $perms as $p ){
-
-
-
-                array_push($new_perms,strtolower( $cndb->get_where('permissions',['id' => $p->perms_id ])->row()->label ) );
-
-            }
+            array_push($new_perms,strtolower( $cndb->get_where('permissions',['id' => $p->perms_id ])->row()->label ) );
 
         }
 
 
 
-        
-
+    
         $roles_perms = [ 'roles' => $new_roles, 'permissions' => $new_perms ];
-
-
 
         // set the role and permissions as session
 
