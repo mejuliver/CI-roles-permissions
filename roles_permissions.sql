@@ -3,11 +3,10 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Jul 23, 2018 at 03:22 PM
+-- Generation Time: Jul 24, 2018 at 11:00 AM
 -- Server version: 5.7.14
 -- PHP Version: 5.6.25
 
-SET FOREIGN_KEY_CHECKS=0;
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 SET time_zone = "+00:00";
 
@@ -38,10 +37,10 @@ CREATE TABLE `permissions` (
 -- --------------------------------------------------------
 
 --
--- Table structure for table `perms_roles`
+-- Table structure for table `perms_users`
 --
 
-CREATE TABLE `perms_roles` (
+CREATE TABLE `perms_users` (
   `id` int(11) NOT NULL,
   `users_id` int(11) NOT NULL,
   `perms_id` int(11) NOT NULL
@@ -99,9 +98,9 @@ ALTER TABLE `permissions`
   ADD UNIQUE KEY `label_UNIQUE` (`label`);
 
 --
--- Indexes for table `perms_roles`
+-- Indexes for table `perms_users`
 --
-ALTER TABLE `perms_roles`
+ALTER TABLE `perms_users`
   ADD PRIMARY KEY (`id`),
   ADD KEY `role_id_index` (`users_id`),
   ADD KEY `perm_id_index` (`perms_id`);
@@ -138,37 +137,37 @@ ALTER TABLE `users`
 -- AUTO_INCREMENT for table `permissions`
 --
 ALTER TABLE `permissions`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 --
--- AUTO_INCREMENT for table `perms_roles`
+-- AUTO_INCREMENT for table `perms_users`
 --
-ALTER TABLE `perms_roles`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+ALTER TABLE `perms_users`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 --
 -- AUTO_INCREMENT for table `roles`
 --
 ALTER TABLE `roles`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 --
 -- AUTO_INCREMENT for table `roles_users`
 --
 ALTER TABLE `roles_users`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 --
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 --
 -- Constraints for dumped tables
 --
 
 --
--- Constraints for table `perms_roles`
+-- Constraints for table `perms_users`
 --
-ALTER TABLE `perms_roles`
-  ADD CONSTRAINT `perms_roles_ibfk_1` FOREIGN KEY (`users_id`) REFERENCES `users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  ADD CONSTRAINT `perms_roles_ibfk_2` FOREIGN KEY (`perms_id`) REFERENCES `permissions` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE `perms_users`
+  ADD CONSTRAINT `perms_users_ibfk_1` FOREIGN KEY (`users_id`) REFERENCES `users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `perms_users_ibfk_2` FOREIGN KEY (`perms_id`) REFERENCES `permissions` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
 -- Constraints for table `roles_users`
@@ -176,7 +175,6 @@ ALTER TABLE `perms_roles`
 ALTER TABLE `roles_users`
   ADD CONSTRAINT `roles_users_ibfk_1` FOREIGN KEY (`users_id`) REFERENCES `users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
   ADD CONSTRAINT `roles_users_ibfk_2` FOREIGN KEY (`roles_id`) REFERENCES `roles` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
-SET FOREIGN_KEY_CHECKS=1;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
