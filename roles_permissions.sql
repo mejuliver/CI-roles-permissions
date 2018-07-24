@@ -3,10 +3,11 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Jul 03, 2018 at 02:43 PM
+-- Generation Time: Jul 23, 2018 at 03:22 PM
 -- Server version: 5.7.14
 -- PHP Version: 5.6.25
 
+SET FOREIGN_KEY_CHECKS=0;
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 SET time_zone = "+00:00";
 
@@ -42,7 +43,7 @@ CREATE TABLE `permissions` (
 
 CREATE TABLE `perms_roles` (
   `id` int(11) NOT NULL,
-  `roles_id` int(11) NOT NULL,
+  `users_id` int(11) NOT NULL,
   `perms_id` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
@@ -102,7 +103,7 @@ ALTER TABLE `permissions`
 --
 ALTER TABLE `perms_roles`
   ADD PRIMARY KEY (`id`),
-  ADD KEY `role_id_index` (`roles_id`),
+  ADD KEY `role_id_index` (`users_id`),
   ADD KEY `perm_id_index` (`perms_id`);
 
 --
@@ -166,15 +167,16 @@ ALTER TABLE `users`
 -- Constraints for table `perms_roles`
 --
 ALTER TABLE `perms_roles`
-  ADD CONSTRAINT `perms_roles_ibfk_1` FOREIGN KEY (`roles_id`) REFERENCES `roles` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  ADD CONSTRAINT `perms_roles_ibfk_2` FOREIGN KEY (`perms_id`) REFERENCES `perms_roles` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+  ADD CONSTRAINT `perms_roles_ibfk_1` FOREIGN KEY (`users_id`) REFERENCES `users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `perms_roles_ibfk_2` FOREIGN KEY (`perms_id`) REFERENCES `permissions` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
 -- Constraints for table `roles_users`
 --
 ALTER TABLE `roles_users`
   ADD CONSTRAINT `roles_users_ibfk_1` FOREIGN KEY (`users_id`) REFERENCES `users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  ADD CONSTRAINT `roles_users_ibfk_2` FOREIGN KEY (`roles_id`) REFERENCES `roles` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION;
+  ADD CONSTRAINT `roles_users_ibfk_2` FOREIGN KEY (`roles_id`) REFERENCES `roles` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+SET FOREIGN_KEY_CHECKS=1;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
