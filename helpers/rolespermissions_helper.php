@@ -10,7 +10,7 @@ if ( ! function_exists('inRole')) {
         $res = false;
 
         // check if there are no roles and permissions
-        if( $CI->session->userdata('roles_perms') == null || $CI->session->userdata('roles_perms') == '' ){
+        if( $CI->session->userdata('perms_roles') == null || $CI->session->userdata('perms_roles') == '' ){
             return false;
         }
 
@@ -18,9 +18,9 @@ if ( ! function_exists('inRole')) {
 
         // check if theres a role first
 
-        if( $CI->session->userdata('roles_perms') != null && $CI->session->userdata('roles_perms') != '' && $role_name ){
+        if( $CI->session->userdata('perms_roles') != null && $CI->session->userdata('perms_roles') != '' && $role_name ){
 
-            if( in_array(strtolower($role_name), $CI->session->userdata('roles_perms')['roles'] )){
+            if( in_array(strtolower($role_name), $CI->session->userdata('perms_roles')['roles'] )){
                 return true;
             }
 
@@ -44,16 +44,16 @@ if ( ! function_exists('canPerm')) {
         $res = false;
 
         // check if there are no roles and permissions
-        if( $CI->session->userdata('roles_perms') == null || $CI->session->userdata('roles_perms') == '' ){
+        if( $CI->session->userdata('perms_roles') == null || $CI->session->userdata('perms_roles') == '' ){
             return false;
         }
 
 
         // check if theres a role first
 
-        if( $CI->session->userdata('roles_perms') != null && $CI->session->userdata('roles_perms') != '' && $perm_name ){
+        if( $CI->session->userdata('perms_roles') != null && $CI->session->userdata('perms_roles') != '' && $perm_name ){
 
-            if( in_array(strtolower($perm_name), $CI->session->userdata('roles_perms')['permissions'] )){
+            if( in_array(strtolower($perm_name), $CI->session->userdata('perms_roles')['permissions'] )){
 
                 return true;
 
@@ -187,13 +187,13 @@ if ( ! function_exists('setRolesPerms')) {
 
         
 
-        $roles_perms = [ 'roles' => $new_roles, 'permissions' => $new_perms ];
+        $perms_roles = [ 'roles' => $new_roles, 'permissions' => $new_perms ];
 
 
 
         // set the role and permissions as session
 
-        $CI->session->set_userdata('roles_perms',$roles_perms);
+        $CI->session->set_userdata('perms_roles',$perms_roles);
         
 
         return true;    
