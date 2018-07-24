@@ -130,7 +130,7 @@ if( ! function_exists('getAllRoles') ){
 }
 
 if ( ! function_exists('getUsersPerRolesName') ){
-    function getUsersPerRolesName($name,$table=fase){
+    function getUsersPerRolesName($name,$table=false){
         $CI =& get_instance();
         // get the id of the requested role first
         $role_name = strtolower($name);
