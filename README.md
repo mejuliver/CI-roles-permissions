@@ -1,19 +1,12 @@
 # CI-roles-permissions
 
-first, copy the isAuth_helper.php and RolesPermissions_helper.php to your app helpers folder (application/helpers)
+first, copy the isauth_helper.php and rolespermissions_helper.php to your app helpers folder (application/helpers)
 
 and autoload the 'rolespermissions' and 'isauth' helper to autoload.php
 
 ```
 $autoload['helper'] = array('url', 'form','isAuth','RolesPermissions');
 ```
-
-enable hooks to auto run the helper on app boot
-
-```
-$config['enable_hooks'] = FALSE;
-```
-
 I recommend to enable hooks from config.php to auto run the helper on app boot
 
 ```
@@ -24,7 +17,6 @@ and then copy the hooks.php (config/hooks.php)
 import the sql file (roles_permissions.sql) to your database and tailor it to your needs
 
 on user authentication, attach below as a session data
-
 
 ```
 $this->session->userdata('auth',true);
