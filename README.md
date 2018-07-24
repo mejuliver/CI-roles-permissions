@@ -19,9 +19,9 @@ import the sql file (roles_permissions.sql) to your database and tailor it to yo
 on user authentication, attach below as a session data
 
 ```
-$this->session->userdata('auth',true);
+$this->session->set_userdata('auth',true);
 $user_info = [ 'users_id' => $users_id ];
-$this->session->userdata('user_info',$user_info);
+$this->session->set_userdata('user_info',$user_info);
 ```
 
 to use it, to check if current user has a role, you can do (example, check if has role of admin)
