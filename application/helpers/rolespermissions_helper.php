@@ -202,10 +202,11 @@ if ( ! function_exists('setRolesPerms')) {
         $CI->load->library('session');
 
         // initialize defaults
+        
         if( !$id ){
-            $id = ( $CI->session->userdata('auth') != null && $CI->session->userdata('auth') == true ) ? $CI->session->userdata('user_info')['users_id'] : false; 
-
+            $id = ( $CI->session->userdata('auth') != null && $CI->session->userdata('auth') ) ? $CI->session->userdata('user_info')['users_id'] : false; 
         }
+
         
         if( !$id ){
 

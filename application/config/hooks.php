@@ -8,17 +8,19 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 | This file lets you define "hooks" to extend CI without hacking the core
 | files.  Please see the user guide for info:
 |
-|	https://codeigniter.com/user_guide/general/hooks.html
+|       https://codeigniter.com/user_guide/general/hooks.html
 |
 */
-$hook['post_controller'][] = array(
+
+
+$hook['post_controller_constructor'][] = array(
         'class'    => '',
         'function' => 'isAuth',
         'filename' => 'isauth_helper.php',
         'filepath' => 'helpers',
         'params'   => false
 );
-$hook['post_controller'][] = array(
+$hook['post_controller_constructor'][] = array(
         'class'    => '',
         'function' => 'setRolesPerms',
         'filename' => 'rolespermissions_helper.php',
