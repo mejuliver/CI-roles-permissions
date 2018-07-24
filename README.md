@@ -5,7 +5,7 @@ first, copy the isauth_helper.php and rolespermissions_helper.php to your app he
 and autoload the 'rolespermissions' and 'isauth' helper to autoload.php
 
 ```
-$autoload['helper'] = array('url', 'form','isAuth','RolesPermissions');
+$autoload['helper'] = array('url', 'form','isauth','rolespermissions');
 ```
 I recommend to enable hooks from config.php to auto run the helper on app boot
 
